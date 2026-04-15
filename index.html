@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<!-- saved from url=(0141)file:///C:/Users/DarwinSaldivar/OneDrive%20-%20Sociedad%20Educacional%20Cabo%20de%20Hornos%20S.A/Escritorio/Ruleta/ruleta_vsc_pack/index.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Ruleta Vida Saludable - Medio Ambiente</title>
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html, body { width:100%; height:100%; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:#92e0b0;
+      color:#a88383;
+      overflow:hidden;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+/* linea para el fondo */
+#app {
+  width:100vw;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background-image: url("./333.PNG");
+  background-size: 80%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+    #bg-deco, #leaves, #sparkle-container, #confetti-layer, #wrong-overlay {
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      border-radius:28px;
+    }
+
+    .leaf { position:absolute; opacity:0.12; animation:floatLeaf 6s infinite ease-in-out; }
+    @keyframes floatLeaf {
+      0%,100% { transform:translateY(0) rotate(0deg); }
+      50% { transform:translateY(-12px) rotate(8deg); }
+    }
+
+    #toolbar {
+      position:relative;
+      z-index:2;
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .top-btn {
+      min-height:3px;
+      padding:0 10px;
+      border-radius:8px;
+      border:1px solid rgba(125,204,108,0.28);
+      background:rgba(125,204,108,0.08);
+      color:#d8f6c8;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:0.04em;
+      cursor:pointer;
+      transition:transform .15s, background .15s, border-color .15s;
+      pointer-events:auto;
+    }
+
+    .top-btn:hover {
+      background:rgba(125,204,108,0.16);
+      border-color:rgba(125,204,108,0.48);
+      transform:translateY(-1px);
+    }
+/* llinea para el Vida saludabe titulo */
+    #header {
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top: -60px;
+  margin-bottom:40px;
+}
+
+   #logo {
+  width:min(800px, 30vw);
+  max-width:600px;
+  min-width:150px;
+  height:auto;
+  display:block;
+  margin-right:auto;
+  position: relative;
+  left: -700px;
+  top: -100px;
+}
+/* solo el titulo del vida saludable */
+   #title-text {
+  font-size: clamp(100px, 2.8vw, 60px);
+  font-weight: 950;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  color:#000000;
+  text-shadow:0 0 30px rgba(0, 0, 0, 0.18);
+  position: relative;
+  top: -500px;
+  left: 10px;
+}
+}
+/* corresponde al subtitulo cabo de hornos */
+   #title-sub {
+  font-size: clamp(20px, 1.6vw, 24px);
+  color: rgba(2, 1, 1, 0.82);
+  letter-spacing: .05em;
+  max-width: 1000px;
+  line-height: 1.45;
+  position: relative;
+  top: -480px;
+}
+
+    #pointer-row { display:flex; justify-content:center; margin:10px 0 -12px; z-index:2; position:relative; }
+    #ptr-wrap { display:flex; flex-direction:column; align-items:center; }
+    #ptr-gem {
+      width:28px; height:28px;
+      background:radial-gradient(circle at 35% 35%,#d4ffb0,#4caa20 60%,#1a5500);
+      border-radius:50%; border:3px solid #7dcc6c; margin-bottom:-2px;
+      box-shadow:0 0 18px rgba(125,204,108,0.9);
+    }
+    #ptr-body {
+      width:0; height:0;
+      border-left:18px solid transparent;
+      border-right:18px solid transparent;
+      border-top:40px solid #4caa20;
+      filter:drop-shadow(0 3px 10px rgba(76,170,32,0.8));
+    }
+
+    #container {
+  position: relative;
+  display: inline-block;
+  margin-top: -500px;
+  left: 37px;
+  z-index: 2;
+}
+
+canvas {
+  display: block;
+  width: min(90vw, 1000px);
+  height: auto;
+}
+
+    #btn-row {
+      position:relative;
+      z-index:2;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:0px;
+      margin-top:1.35rem;
+      flex-wrap:wrap;
+    }
+
+    #spin-btn {
+      min-height:76px;
+      padding:18px 44px;
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      background:linear-gradient(135deg,#2e7d1e 0%,#7dcc6c 40%,#3a9e25 70%,#a8e86c 100%);
+      color:#0a1f0a;
+      border:none;
+      border-radius:60px;
+      cursor:pointer;
+      box-shadow:0 6px 24px rgba(76,170,32,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+      transition:transform .15s, box-shadow .15s;
+      min-width:min(88vw, 420px);
+      position: relative;
+      left: 70px;
+    }
+
+    #spin-btn:hover { transform:translateY(-2px); box-shadow:0 10px 34px rgba(76,170,32,0.65); }
+    #spin-btn:active { transform:scale(0.97); }
+    #spin-btn:disabled { opacity:.35; cursor:not-allowed; transform:none; }
+
+    #mute-btn {
+      width:76px; height:76px; border-radius:50%;
+      border:1px solid rgba(125,204,108,0.35);
+      background:rgba(125,204,108,0.08);
+      color:#7dcc6c; font-size:30px; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:background .15s;
+      position: relative;
+      left: 900px;
+    }
+    #mute-btn:hover { background:rgba(125,204,108,0.18); }
+
+    #hint {
+      position:relative;
+      z-index:2;
+      font-size: clamp(14px, 1.2vw, 18px);
+      color:rgba(125,204,108,0.50);
+      margin-top:10px;
+      letter-spacing:.06em;
+    }
+
+    #overlay {
+      display:none; position:absolute; inset:0; border-radius:28px;
+      background:rgba(5,15,5,0.93);
+      align-items:center; justify-content:center;
+      z-index:20; padding:1rem;
+    }
+    #overlay.show { display:flex; }
+
+    #q-card {
+      background:linear-gradient(160deg,#0d200d 0%,#162e16 100%);
+      border:1px solid rgba(125,204,108,0.4);
+      border-radius:28px;
+      padding:2rem 2rem 1.6rem;
+      max-width:min(980px, 96vw);
+      width:100%;
+      text-align:left;
+      box-shadow:0 0 40px rgba(76,170,32,0.2),0 20px 60px rgba(0,0,0,0.6);
+      transform:scale(0.3) translateY(40px);
+      opacity:0;
+      transition:transform 0.5s cubic-bezier(0.175,0.885,0.32,1.3), opacity .35s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    #q-card::before {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent,rgba(125,204,108,0.7),transparent);
+    }
+
+    #q-card.pop { transform:scale(1) translateY(0); opacity:1; }
+
+    #q-num {
+      font-size:16px; font-weight:800; letter-spacing:.15em;
+      color:rgba(125,204,108,0.62); text-transform:uppercase; margin-bottom:12px;
+    }
+
+    #q-text {
+      font-size: clamp(24px, 2.4vw, 36px);
+      color:#e8f5e0; line-height:1.45; font-weight:800; margin-bottom:18px;
+    }
+
+    #open-note {
+      display:none;
+      margin:12px 0 18px;
+      padding:18px 20px;
+      border-radius:18px;
+      border:1px dashed rgba(125,204,108,0.35);
+      background:rgba(125,204,108,0.06);
+      color:#d9f4ca;
+      font-size: clamp(18px, 1.8vw, 26px);
+      line-height:1.45;
+      font-weight:700;
+    }
+
+    .opt-btn {
+      display:block;
+      width:100%;
+      text-align:left;
+      padding:18px 20px;
+      margin-bottom:12px;
+      border-radius:18px;
+      cursor:pointer;
+      font-size: clamp(20px, 2vw, 28px);
+      line-height:1.45;
+      font-weight:700;
+      border:1px solid rgba(125,204,108,0.25);
+      background:rgba(125,204,108,0.06);
+      color:#d0f0c0;
+      transition:background .15s, border-color .15s, transform .1s;
+      min-height:74px;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      background:rgba(125,204,108,0.15);
+      border-color:rgba(125,204,108,0.5);
+      transform:translateY(-1px);
+    }
+
+    .opt-btn.correct { background:rgba(76,170,32,0.28); border-color:#4caa20; color:#d4ffb0; }
+    .opt-btn.wrong { background:rgba(180,40,40,0.28); border-color:#aa3030; color:#ffd0d0; }
+    .opt-btn:disabled { cursor:default; }
+
+    #feedback {
+      font-size: clamp(19px, 1.8vw, 28px);
+      font-weight:900;
+      margin:10px 0 14px;
+      min-height:28px;
+      text-align:center;
+    }
+
+    #q-close {
+      display:block;
+      width:100%;
+      min-height:66px;
+      padding:12px 16px;
+      font-size: clamp(16px, 1.4vw, 22px);
+      font-weight:900;
+      letter-spacing:.08em;
+      background:rgba(125,204,108,0.08);
+      color:rgba(125,204,108,0.8);
+      border:1px solid rgba(125,204,108,0.2);
+      border-radius:16px;
+      cursor:pointer;
+      text-transform:uppercase;
+      transition:all .15s;
+      margin-top:6px;
+    }
+
+    #q-close:hover { background:rgba(125,204,108,0.18); color:#a8e88c; border-color:rgba(125,204,108,0.45); }
+
+    .status-toast {
+      position:absolute;
+      left:50%;
+      bottom:26px;
+      transform:translateX(-50%) translateY(20px);
+      background:rgba(7,25,7,0.92);
+      color:#d9f9c7;
+      border:1px solid rgba(125,204,108,0.35);
+      border-radius:16px;
+      padding:14px 18px;
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.03em;
+      opacity:0;
+      z-index:50;
+      transition:opacity .25s ease, transform .25s ease;
+      pointer-events:none;
+    }
+
+    .status-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    .confetti-piece { position:absolute; width:10px; height:10px; border-radius:2px; animation:confettiFall linear forwards; }
+    @keyframes confettiFall {
+      0% { transform:translateY(-20px) rotate(0deg); opacity:1; }
+      100% { transform:translateY(920px) rotate(720deg); opacity:0; }
+    }
+
+    #wrong-overlay { display:none; z-index:40; align-items:center; justify-content:center; background:rgba(120,10,10,0.0); }
+    #wrong-overlay.show { display:flex; }
+    #big-x {
+      font-size:200px;
+      line-height:1;
+      color:#ff3030;
+      opacity:0;
+      transform:scale(3);
+      transition:transform 0.35s cubic-bezier(0.175,0.885,0.32,1.3), opacity 0.25s ease;
+      text-shadow:0 0 60px rgba(255,48,48,0.8),0 0 20px rgba(255,48,48,0.6);
+      pointer-events:none;
+      font-weight:900;
+      font-family:system-ui;
+    }
+    #wrong-overlay.show #big-x { opacity:1; transform:scale(1); }
+
+    .spark { position:absolute; border-radius:50%; pointer-events:none; animation:sparkfly 0.9s ease-out forwards; }
+    @keyframes sparkfly {
+      0% { transform:translate(0,0) scale(1); opacity:1; }
+      100% { transform:translate(var(--dx),var(--dy)) scale(0); opacity:0; }
+    }
+
+    @media (max-width: 900px) {
+      #wrap { min-height:100vh; border-radius:0; padding:1rem 1rem 1.4rem; }
+      #bg-deco, #leaves, #sparkle-container, #confetti-layer, #wrong-overlay, #overlay { border-radius:0; }
+      #toolbar { justify-content:center; }
+      #logo { width:min(220px, 42vw); }
+      #spin-btn { min-width:100%; }
+      #mute-btn { width:68px; height:68px; font-size:28px; }
+      .top-btn { width:100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div id="wrap">
+    <svg id="bg-deco" viewBox="0 0 560 760" preserveAspectRatio="xMidYMid slice">
+      <circle cx="280" cy="380" r="320" fill="none" stroke="rgba(125,204,108,0.05)" stroke-width="1"></circle>
+      <circle cx="280" cy="380" r="250" fill="none" stroke="rgba(125,204,108,0.04)" stroke-width="0.5"></circle>
+    </svg>
+    <div id="leaves"><div class="leaf" style="left: 4%; top: 10%; animation-delay: 0s; font-size: 20px;">🌿</div><div class="leaf" style="left: 89%; top: 16%; animation-delay: 1.2s; font-size: 23px;">🍃</div><div class="leaf" style="left: 3%; top: 76%; animation-delay: 2.4s; font-size: 26px;">🌱</div><div class="leaf" style="left: 91%; top: 70%; animation-delay: 3.6s; font-size: 29px;">🍀</div></div>
+    <div id="sparkle-container"></div>
+    <div id="confetti-layer"></div>
+    <div id="wrong-overlay"><div id="big-x">✕</div></div>
+
+    <div id="toolbar">
+      <button id="fullscreen-btn" class="top-btn">⛶ Pantalla completa</button>
+      <button id="reset-btn" class="top-btn">↺ Reiniciar ruleta</button>
+    </div>
+
+    <div id="header">
+      <img id="logo" alt="Logo Medio Ambiente Colegio Cabo de Hornos" src="./index_files/logo-medio-ambiente-1024x1024.png">
+      <div id="title-text">Ruleta</div>
+       <div id="title-text"> Vida Saludable</div>
+      <div id="title-sub">Colegio Cabo de hornos</div>
+    </div>
+
+    <div id="pointer-row">
+      <div id="ptr-wrap">
+        <div id="ptr-gem"></div>
+        <div id="ptr-body"></div>
+      </div>
+    </div>
+
+    <div id="container">
+      <canvas id="top" width="640" height="640"></canvas>
+      <div id="overlay" class="show">
+        <div id="q-card" class="pop">
+          <div id="q-num">Pregunta 2 de 21</div>
+          <div id="q-text">¿Las bebidas azucaradas aumentan el riesgo de sobrepeso?</div>
+          <div id="opts-area"><button class="opt-btn">A) No, porque el azúcar desaparece al correr.</button><button class="opt-btn">B) Sí.</button><button class="opt-btn">C) Solo si la bebida es de color azul.</button></div>
+          <div id="open-note" style="display: none;"></div>
+          <div id="feedback"></div>
+          <button id="q-close">Cerrar · [Espacio]</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="btn-row">
+      <button id="spin-btn">🌱 Girar ruleta</button>
+      <button id="mute-btn" aria-label="Activar o desactivar sonido">🔊</button>
+    </div>
+
+    <p id="hint">[Espacio] para girar</p>
+    <div id="toast" class="status-toast"></div>
+  </div>
+</div>
+
+<script>
+const SEGS = [
+  { label:"Azúcar",    icon:"🍬", fill:"#7a1a1a", fillLight:"#bb3030" },
+  { label:"Bebidas",   icon:"🥤", fill:"#1a4a7a", fillLight:"#2a6aaa" },
+  { label:"Dientes",   icon:"🦷", fill:"#4a4a1a", fillLight:"#7a7a2a" },
+  { label:"Dulces",    icon:"🍭", fill:"#6a1a5a", fillLight:"#9a2a88" },
+  { label:"Carbohid.", icon:"🌾", fill:"#1a6b3a", fillLight:"#28994f" },
+  { label:"Grasas",    icon:"🥑", fill:"#2a7a2a", fillLight:"#3daa3d" },
+];
+
+const ALL_Q = [
+  { num:1, type:"multi", text:"¿Cuáles son los efectos negativos del azúcar?", opts:["Puede dañar los dientes, favorecer el sobrepeso y aportar muchas calorías con poco valor nutritivo.","Hace que el cuaderno cante en clases.","Sirve para que los lápices crezcan en los árboles."], correct:0 },
+  { num:2, type:"multi", text:"¿Las bebidas azucaradas aumentan el riesgo de sobrepeso?", opts:["No, porque el azúcar desaparece al correr.","Sí.","Solo si la bebida es de color azul."], correct:1 },
+  { num:3, type:"multi", text:"¿Qué problema dental se relaciona con el exceso de azúcar?", opts:["La caries dental.","Que los dientes brillen como linterna.","Que la lengua se vuelva cuadrada."], correct:0 },
+  { num:4, type:"multi", text:"¿Los dulces se deben comer en exceso?", opts:["Sí, todos los días y a toda hora.","No. Se deben consumir solo de vez en cuando y en poca cantidad.","Sí, porque reemplazan el desayuno y el almuerzo."], correct:1 },
+  { num:5, type:"multi", text:"¿Qué fuentes de carbohidratos se consideran más saludables?", opts:["Los granos integrales, las frutas, las verduras y las legumbres.","Los caramelos, las gomitas y las bebidas.","Las nubes, los botones y las tizas."], correct:0 },
+  { num:6, type:"multi", text:"¿Es mejor reemplazar grasas saturadas por grasas saludables y alimentos con fibra que por ultraprocesados?", opts:["No, porque da lo mismo lo que uno coma.","Sí.","Solo si lo dice un extraterrestre."], correct:1 },
+  { num:7, type:"multi", text:"Nombra un alimento alto en grasas saturadas.", opts:["La mantequilla.","El agua.","Un borrador."], correct:0 },
+  { num:8, type:"multi", text:"¿Son malos todos los carbohidratos?", opts:["Sí, todos son malos siempre.","No. Los carbohidratos le dan energía al cuerpo; lo importante es elegir los más saludables.","No, porque son juguetes de cocina."], correct:1 },
+  { num:9, type:"multi", text:"¿Cuáles son los efectos negativos del sodio?", opts:["Consumido en exceso puede subir la presión arterial y aumentar el riesgo de enfermedades del corazón.","Hace que los zapatos naden.","Sirve para convertir el pan en piedra."], correct:0 },
+  { num:10, type:"multi", text:"¿Cuáles son los efectos negativos de las grasas saturadas?", opts:["Ayudan a que el corazón funcione mejor que nunca.","En exceso pueden subir el colesterol malo y aumentar el riesgo de problemas al corazón.","Hacen que el pelo cambie de color cada hora."], correct:1 },
+  { num:11, type:"multi", text:"Según Harvard, ¿qué alimentos no debemos consumir o debemos limitar?", opts:["Debemos limitar la carne roja, el queso y los granos refinados, y evitar las bebidas azucaradas y las carnes procesadas como tocino y embutidos.","Debemos evitar las frutas, verduras y el agua.","Debemos comer solo helado con galletas todos los días."], correct:0 },
+  { num:12, type:"multi", text:"¿Para qué nos ayuda la vitamina D?", opts:["Para convertir las mochilas en robots.","Ayuda al cuerpo a absorber calcio y a mantener los huesos fuertes. También ayuda a los músculos.","Sirve para que los cuadernos vuelen."], correct:1 },
+  { num:13, type:"multi", text:"¿Para qué nos ayuda la vitamina A?", opts:["Ayuda a la vista, al sistema de defensas y al crecimiento del cuerpo.","Sirve para respirar debajo del pupitre.","Hace que los calcetines hablen."], correct:0 },
+  { num:14, type:"multi", text:"¿Qué es un carbohidrato complejo?", opts:["Es un carbohidrato formado por cadenas largas de azúcar, que suele entregar energía de manera más lenta y estable.","Es un pan que sabe matemáticas.","Es una fruta que maneja auto."], correct:0 },
+  { num:15, type:"multi", text:"¿Qué combinación ayuda a mantener huesos fuertes?", opts:["Ketchup y mayonesa.","Calcio y vitamina D.","Chocolate y papas fritas."], correct:1 },
+  { num:16, type:"multi", text:"¿Qué es un carbohidrato simple?", opts:["Es un carbohidrato que el cuerpo descompone rápido para usarlo como energía.","Es un tallarín que toca guitarra.","Es una cuchara con sabor a naranja."], correct:0 },
+  { num:17, type:"open", text:"Menciona 3 alimentos de carbohidratos simples." },
+  { num:18, type:"open", text:"Menciona 3 alimentos de carbohidratos complejos." },
+  { num:19, type:"open", text:"Menciona 3 alimentos altos en sodio." },
+  { num:20, type:"open", text:"Menciona 3 alimentos altos en azúcar." },
+  { num:21, type:"open", text:"Menciona 3 alimentos altos en grasas saturadas." },
+];
+
+let used = [];
+let rot = 0;
+let spinning = false;
+let overlayOpen = false;
+let muted = false;
+let audioCtx = null;
+
+function pickQ() {
+  if (used.length >= ALL_Q.length) used = [];
+  const avail = ALL_Q.filter((_, i) => !used.includes(i));
+  const q = avail[Math.floor(Math.random() * avail.length)];
+  used.push(ALL_Q.indexOf(q));
+  return q;
+}
+
+const N = SEGS.length;
+const ARC = (2 * Math.PI) / N;
+const cv = document.getElementById('top');
+const ctx = cv.getContext('2d');
+const CX = 320, CY = 320, R = 300;
+
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTick(speed) {
+  if (muted) return;
+  try {
+    const ac = getAudio(), o = ac.createOscillator(), g = ac.createGain();
+    o.connect(g); g.connect(ac.destination);
+    o.frequency.value = Math.min(600 + speed * 800, 1400);
+    o.type = 'triangle';
+    g.gain.setValueAtTime(0.18, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.06);
+    o.start(ac.currentTime);
+    o.stop(ac.currentTime + 0.06);
+  } catch (e) {}
+}
+
+function playFanfare() {
+  if (muted) return;
+  try {
+    const ac = getAudio();
+    [523, 659, 784, 1047].forEach((f, i) => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.connect(g); g.connect(ac.destination);
+      o.type = 'sine'; o.frequency.value = f;
+      const t = ac.currentTime + i * 0.13;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.22, t + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+      o.start(t); o.stop(t + 0.38);
+    });
+  } catch (e) {}
+}
+
+function playCorrectSound() {
+  if (muted) return;
+  try {
+    const ac = getAudio();
+    [523, 659, 784, 1047, 1318].forEach((f, i) => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.connect(g); g.connect(ac.destination);
+      o.type = 'sine'; o.frequency.value = f;
+      const t = ac.currentTime + i * 0.1;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.25, t + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+      o.start(t); o.stop(t + 0.4);
+    });
+  } catch (e) {}
+}
+
+function playWrongSound() {
+  if (muted) return;
+  try {
+    const ac = getAudio();
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.connect(g); g.connect(ac.destination);
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(300, ac.currentTime);
+    o.frequency.linearRampToValueAtTime(80, ac.currentTime + 0.5);
+    g.gain.setValueAtTime(0.3, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.55);
+    o.start(ac.currentTime);
+    o.stop(ac.currentTime + 0.55);
+  } catch (e) {}
+}
+
+['🌿', '🍃', '🌱', '🍀'].forEach((l, i) => {
+  const d = document.createElement('div');
+  d.className = 'leaf';
+  d.textContent = l;
+  d.style.cssText = `left:${[4,89,3,91][i]}%;top:${[10,16,76,70][i]}%;animation-delay:${i * 1.2}s;font-size:${20 + i * 3}px`;
+  document.getElementById('leaves').appendChild(d);
+});
+
+function drawWheel(r) {
+  ctx.clearRect(0, 0, 540, 540);
+  for (let i = 0; i < N; i++) {
+    const s = r + i * ARC, e = s + ARC, S = SEGS[i];
+    ctx.beginPath();
+    ctx.moveTo(CX, CY);
+    ctx.arc(CX, CY, R, s, e);
+    ctx.closePath();
+    ctx.fillStyle = S.fill;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.13)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  for (let i = 0; i < N; i++) {
+    const s = r + i * ARC, mid = s + ARC / 2, S = SEGS[i];
+    const grd = ctx.createLinearGradient(
+      CX + Math.cos(mid) * R * 0.1,
+      CY + Math.sin(mid) * R * 0.1,
+      CX + Math.cos(mid) * R,
+      CY + Math.sin(mid) * R
+    );
+    grd.addColorStop(0, S.fillLight + 'aa');
+    grd.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.moveTo(CX, CY);
+    ctx.arc(CX, CY, R, s, s + ARC);
+    ctx.closePath();
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(CX, CY);
+    ctx.rotate(mid);
+    const lx = R * 0.62;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '40px system-ui';
+    ctx.fillText(S.icon, lx, -16);
+    ctx.font = '700 20px system-ui, sans-serif';
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillText(S.label, lx + 1, 9);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(S.label, lx, 8);
+    ctx.restore();
+  }
+
+  ctx.beginPath();
+  ctx.arc(CX, CY, R, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(125,204,108,0.8)';
+  ctx.lineWidth = 6;
+  ctx.stroke();
+
+  const hub = ctx.createRadialGradient(CX - 7, CY - 7, 1, CX, CY, 32);
+  hub.addColorStop(0, '#d4ffb0');
+  hub.addColorStop(0.5, '#4caa20');
+  hub.addColorStop(1, '#1a5500');
+  ctx.beginPath();
+  ctx.arc(CX, CY, 32, 0, 2 * Math.PI);
+  ctx.fillStyle = hub;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(125,204,108,0.9)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.font = '19px system-ui';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🌿', CX, CY + 1);
+}
+
+drawWheel(rot);
+
+const CONFETTI_COLORS = ['#ff4e91','#ff9d00','#ffe300','#00c846','#00aaff','#aa44ff','#ff6b6b','#00e5ff','#69ff47'];
+
+function launchConfetti() {
+  const layer = document.getElementById('confetti-layer');
+  layer.innerHTML = '';
+  for (let i = 0; i < 120; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    const color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    const left = Math.random() * 100;
+    const delay = Math.random() * 1.2;
+    const dur = 1.8 + Math.random() * 1.5;
+    const w = 8 + Math.random() * 10;
+    const h = 8 + Math.random() * 10;
+    const shape = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.cssText = `background:${color};left:${left}%;top:-20px;width:${w}px;height:${h}px;border-radius:${shape};animation-duration:${dur}s;animation-delay:${delay}s;`;
+    layer.appendChild(p);
+  }
+  setTimeout(() => { layer.innerHTML = ''; }, 4000);
+}
+
+function showWrongX() {
+  const wo = document.getElementById('wrong-overlay');
+  const bx = document.getElementById('big-x');
+  bx.style.opacity = '0';
+  bx.style.transform = 'scale(3)';
+  wo.classList.add('show');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    bx.style.opacity = '1';
+    bx.style.transform = 'scale(1)';
+  }));
+  setTimeout(() => {
+    bx.style.opacity = '0';
+    bx.style.transform = 'scale(0.5)';
+    setTimeout(() => wo.classList.remove('show'), 400);
+  }, 2200);
+}
+
+function launchSparks() {
+  const sc = document.getElementById('sparkle-container');
+  const wr = document.getElementById('wrap').getBoundingClientRect();
+  const cr = document.getElementById('container').getBoundingClientRect();
+  const cx = cr.left - wr.left + cr.width / 2;
+  const cy = cr.top - wr.top + cr.height / 2;
+  const colors = ['#7dcc6c','#a8e88c','#d4ffb0','#4caa20','#50cc80'];
+  for (let i = 0; i < 28; i++) {
+    const sp = document.createElement('div');
+    sp.className = 'spark';
+    const ang = Math.random() * 2 * Math.PI;
+    const d = 100 + Math.random() * 120;
+    const sz = 4 + Math.random() * 6;
+    sp.style.cssText = `background:${colors[i % colors.length]};width:${sz}px;height:${sz}px;left:${cx}px;top:${cy}px;--dx:${Math.cos(ang) * d}px;--dy:${Math.sin(ang) * d}px;animation-delay:${Math.random() * 0.15}s`;
+    sc.appendChild(sp);
+    setTimeout(() => sp.remove(), 1100);
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+function spin() {
+  if (spinning || overlayOpen) return;
+  spinning = true;
+  document.getElementById('spin-btn').disabled = true;
+  getAudio();
+
+  const extra = (Math.random() * 2 * Math.PI) + (Math.PI * 10);
+  const dur = 4200;
+  const t0 = performance.now();
+  const r0 = rot;
+
+  function ease(t) { return 1 - Math.pow(1 - t, 4.5); }
+  let lastSeg = -1;
+
+  requestAnimationFrame(function loop(now) {
+    const t = Math.min((now - t0) / dur, 1);
+    const prev = rot;
+    rot = r0 + extra * ease(t);
+    drawWheel(rot);
+
+    const speed = (rot - prev) / ARC;
+    const angle = (2 * Math.PI - (rot % (2 * Math.PI))) % (2 * Math.PI);
+    const cur = Math.floor(angle / ARC) % N;
+    if (cur !== lastSeg) {
+      playTick(Math.min(speed, 1));
+      lastSeg = cur;
+    }
+
+    if (t < 1) {
+      requestAnimationFrame(loop);
+    } else {
+      rot = rot % (2 * Math.PI);
+      spinning = false;
+      document.getElementById('spin-btn').disabled = false;
+      playFanfare();
+      setTimeout(showQ, 300);
+    }
+  });
+}
+
+function showQ() {
+  const q = pickQ();
+  document.getElementById('q-num').textContent = 'Pregunta ' + q.num + ' de 21';
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('open-note').style.display = 'none';
+  const optsArea = document.getElementById('opts-area');
+  optsArea.innerHTML = '';
+
+  if (q.type === 'multi') {
+    const labels = ['A)', 'B)', 'C)'];
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = labels[i] + ' ' + opt;
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+        if (i === q.correct) {
+          btn.classList.add('correct');
+          document.getElementById('feedback').style.color = '#a8e88c';
+          document.getElementById('feedback').textContent = '🎉 ¡Correcto!';
+          playCorrectSound();
+          launchConfetti();
+        } else {
+          btn.classList.add('wrong');
+          document.querySelectorAll('.opt-btn')[q.correct].classList.add('correct');
+          document.getElementById('feedback').style.color = '#ff7070';
+          document.getElementById('feedback').textContent = 'La respuesta correcta es ' + labels[q.correct];
+          playWrongSound();
+          showWrongX();
+        }
+      });
+      optsArea.appendChild(btn);
+    });
+  } else {
+    const note = document.getElementById('open-note');
+    note.style.display = 'block';
+    note.textContent = 'Pregunta abierta: responde en voz alta o en equipo.';
+  }
+
+  launchSparks();
+  const ov = document.getElementById('overlay');
+  const card = document.getElementById('q-card');
+  overlayOpen = true;
+  ov.classList.add('show');
+  card.classList.remove('pop');
+  requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('pop')));
+}
+
+function closeOverlay() {
+  document.getElementById('q-card').classList.remove('pop');
+  setTimeout(() => {
+    document.getElementById('overlay').classList.remove('show');
+    overlayOpen = false;
+  }, 320);
+}
+
+function resetWheel() {
+  if (spinning) return;
+  used = [];
+  rot = 0;
+  drawWheel(rot);
+  if (overlayOpen) closeOverlay();
+  document.getElementById('confetti-layer').innerHTML = '';
+  showToast('Ruleta reiniciada');
+}
+
+async function toggleFullscreen() {
+  try {
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen();
+      showToast('Pantalla completa activada');
+    } else {
+      await document.exitFullscreen();
+      showToast('Pantalla completa desactivada');
+    }
+  } catch (e) {
+    showToast('Tu navegador bloqueó la pantalla completa');
+  }
+}
+
+document.getElementById('spin-btn').addEventListener('click', spin);
+document.getElementById('q-close').addEventListener('click', closeOverlay);
+document.getElementById('overlay').addEventListener('click', function (e) { if (e.target === this) closeOverlay(); });
+document.getElementById('mute-btn').addEventListener('click', function () { muted = !muted; this.textContent = muted ? '🔇' : '🔊'; });
+document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+document.getElementById('reset-btn').addEventListener('click', resetWheel);
+
+document.addEventListener('keydown', function (e) {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    overlayOpen ? closeOverlay() : spin();
+  }
+  if (e.key.toLowerCase() === 'r') resetWheel();
+  if (e.key.toLowerCase() === 'f') toggleFullscreen();
+});
+</script>
+
+
+</body></html>
